@@ -34,3 +34,11 @@ bash "install npm - package manager for node" do
   not_if "#{node[:nodejs][:dir]}/bin/npm -v 2>&1 | grep '#{node[:nodejs][:npm]}'"
 end
 
+node[:nodejs][:npm_packages].each do |pkg|
+  bash "install npm package #{pkg}" do
+    code <<EOH
+#{node[:nodejs][:dir]}/bin/npm install #{pkg}
+EOH
+  end
+
+end
