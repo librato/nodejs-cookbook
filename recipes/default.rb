@@ -27,16 +27,18 @@ case node[:platform]
     package "libssl-dev"
 end
 
+ver = node[:nodejs][:version]
+
 bash "install nodejs from source" do
   cwd "/usr/local/src"
   user "root"
   code <<-EOH
-    wget http://nodejs.org/dist/node-v#{node[:nodejs][:version]}.tar.gz && \
-    tar zxf node-v#{node[:nodejs][:version]}.tar.gz && \
-    cd node-v#{node[:nodejs][:version]} && \
+    wget http://nodejs.org/dist/v#{ver}/node-v#{ver}.tar.gz && \
+    tar zxf node-v#{ver}.tar.gz && \
+    cd node-v#{ver} && \
     ./configure --prefix=#{node[:nodejs][:dir]} && \
     make && \
     make install
   EOH
-  not_if "#{node[:nodejs][:dir]}/bin/node -v 2>&1 | grep 'v#{node[:nodejs][:version]}'"
+  not_if "#{node[:nodejs][:dir]}/bin/node -v 2>&1 | grep 'v#{ver}'"
 end
